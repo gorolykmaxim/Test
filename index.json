@@ -1,4 +1,17 @@
 {
+  "platforms": [
+    {
+      "name": "Кино-дом",
+      "categories": {
+        "cache-ttl": 86400000,
+        "category-list": {
+          "name": "Новое",
+          "pages-per-load": 3,
+          "crawler": "function crawl(args) {\n    let url = \"http://kino-dom.org/page/\" + JSON.stringify(args[0]) + \"/\";\n    let responses = http([{url: url}]);\n    let items = regex('<div class=\"post-cover\">([\\s\\S]*?)</a>', responses);\n    let shows = [];\n    for (let i = 0; i < items.length; i++) {\n        let item = items[i];\n        let title = regex('<div class=\"post-title\"><h3>(.*)</h3></div>', [item])[0];\n        let thumbnail = regex('<div style=\"background-image:url\\((.*)\\)\" class=\"post-image\">', [item])[0];\n        let ids = regex('<div class=\"post-title-eng\">(.*)</div>', [item]);\n        let id = ids.length > 0 ? ids[0] : title;\n        shows.push({id: id, title: title, thumbnail: thumbnail});\n    }\n    return shows;\n}"
+        }
+      }
+    }
+  ],
   "http-client": {
     "user-agents": [
       "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_6) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0.1 Safari/605.1.15",
